@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Forno Rosso – Build your pizza</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
+<link rel="icon" href="{{ url_for('static', filename='favicon.svg') }}" type="image/svg+xml">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="apple-touch-icon" href="{{ url_for('static', filename='apple-touch-icon.png') }}">
+<meta name="theme-color" content="#b3201f">
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<div class="wrap">
+<header><div class="logo">Forno Rosso</div><div class="sub">Pizza your way, plus the extras.</div></header>
+
+<main class="stage">
+  <div class="seg tabs" id="tabs" aria-label="Menu categories"></div>
+
+  <div id="pizzaView">
+  <section id="gallery" aria-label="Pizzas"><p class="gmsg" id="gmsg" role="status"></p><div id="gbody"></div></section>
+  <div id="builder" hidden>
+    <div class="bhead"><button class="clear" id="backpick" type="button">← All pizzas</button>
+      <div><div class="bname" id="bname"></div><div class="muted" id="bsub"></div></div></div>
+
+    <div class="boxwrap" id="boxwrap">
+      <div class="box"><div class="pz" id="pz"><svg id="pizza" viewBox="-160 -160 320 320" role="img" aria-label="Your pizza from above"></svg></div></div>
+      <button class="lid" id="lid" type="button"><b>Forno<br>Rosso</b><span>Start your pizza</span></button>
+    </div>
+
+    <section class="tray" aria-label="Customize your pizza">
+      <h3>Size</h3><div class="seg" id="g-size"></div>
+      <h3>Crust</h3><div class="seg" id="g-crust"></div>
+      <h3>Sauce</h3><div class="seg" id="g-sauce"></div>
+      <h3>Cheese</h3><div class="seg" id="g-cheese"></div>
+      <h3>Toppings: tap to add, tap again for left half, right half, or remove</h3>
+      <div class="bins" id="bins"></div>
+      <button class="clear" id="clear" type="button">Clear all toppings</button>
+      <div class="addbar">
+        <div><span class="muted">This pizza</span> <b id="pprice"></b></div>
+        <div class="addbtns"><button class="clear" id="canceledit" type="button" hidden>Cancel edit</button>
+        <button class="go" id="addp" type="button">Add to order</button></div>
+      </div>
+    </section>
+    </div>
+</div>
+
+  <section class="grid" id="prodView" hidden aria-label="Menu items"></section>
+</main>
+
+<aside class="receipt" id="receipt">
+  <h2>Your order</h2>
+  <p class="meta" id="meta"></p>
+  <ul id="lines"></ul>
+  <div class="total"><span>Total</span><span id="total"></span></div>
+  <button class="go" id="go" type="button" disabled>Place order</button>
+  <form id="co" hidden novalidate>
+    <label>Name<input name="name" autocomplete="name" maxlength="60" required></label>
+    <label>Mobile number<input name="phone" type="tel" autocomplete="tel" maxlength="20" required></label>
+    <fieldset><legend>How do you want it?</legend>
+      <label class="rad"><input type="radio" name="mode" value="pickup" checked> Pickup</label>
+      <label class="rad"><input type="radio" name="mode" value="delivery"> Delivery</label>
+    </fieldset>
+    <label id="addr" hidden>Delivery address<textarea name="address" rows="2" maxlength="200"></textarea></label>
+    <p class="meta">Pay when you pick up or receive your order.</p>
+    <p id="err" role="alert"></p>
+    <button class="go" id="send" type="submit">Confirm order</button>
+    <button class="clear" id="back" type="button">Back to my pizza</button>
+  </form>
+  <div class="bar" aria-hidden="true"></div>
+</aside>
+</div>
+<div class="mbar"><span id="mcount"></span><a class="go" href="#receipt">View order</a></div>
+{% include '_defs.html' %}
+<script src="{{ url_for('static', filename='builder.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>{% if o %}Order {{ o.ticket }}{% else %}Receipt not found{% endif %} – Forno Rosso</title>
+<link href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
+<link rel="icon" href="{{ url_for('static', filename='favicon.svg') }}" type="image/svg+xml">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="apple-touch-icon" href="{{ url_for('static', filename='apple-touch-icon.png') }}">
+<meta name="theme-color" content="#b3201f">
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<div class="wrap narrow">
+<header><a class="logo" href="/">Forno Rosso</a><div class="sub">Your receipt</div></header>
+<section class="receipt">
+{% if not o %}
+  <h2>Receipt not found</h2>
+  <p class="meta">This link is incomplete or has been changed. Please check it and try again.</p>
+  <a class="go linkbtn" href="/">Order a pizza</a>
+{% else %}
+  <h2>Order {{ o.ticket }}</h2>
+  <p class="meta">{{ o.at }} · {{ 'Delivery' if o.mode == 'delivery' else 'Pickup' }}</p>
+  {% if o.sent %}
+  <p class="notice ok" role="status">Your order was sent to the shop. They will call or message you on {{ o.phone }} if anything is needed.</p>
+  {% else %}
+  <p class="notice warn" role="status">Your order has not reached the shop yet. Please send it to them now:</p>
+  <div class="sendrow">
+    {% if sms %}<a class="go linkbtn" href="{{ sms }}">Text the order to the shop</a>{% endif %}
+    <button class="go alt" id="copy" type="button" data-text="{{ text }}">Copy the order</button>
+  </div>
+  <p class="meta" id="copied" role="status"></p>
+  {% endif %}
+  <ul>
+  {% for kind, name, qty, unit, detail in o.lines %}
+    <li class="line"><span class="lt">{{ qty }}× {{ name }}</span><span class="lp">₱{{ '{:,}'.format(qty * unit) }}</span>
+    {% if detail %}<span class="ls">{{ detail | join(' · ') }}</span>{% endif %}</li>
+  {% endfor %}
+  {% if o.fee %}<li class="fee"><span>Delivery</span><span>₱{{ '{:,}'.format(o.fee) }}</span></li>{% endif %}
+  </ul>
+  <div class="total"><span>Total</span><span>₱{{ '{:,}'.format(o.total) }}</span></div>
+  <p class="meta">Pay when you {{ 'receive' if o.mode == 'delivery' else 'pick up' }} your order. Keep this page as your receipt.</p>
+  <a class="go linkbtn" href="/">Order another pizza</a>
+{% endif %}
+  <div class="bar" aria-hidden="true"></div>
+</section>
+</div>
+<script src="{{ url_for('static', filename='receipt.js') }}"></script>
+</body>
+</html>
